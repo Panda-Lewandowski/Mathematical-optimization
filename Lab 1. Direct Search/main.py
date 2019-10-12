@@ -1,5 +1,7 @@
 from math import exp, sin, sqrt, ceil, log
 from prettytable import PrettyTable
+from numpy import arange
+from matplotlib import pyplot as plt
 
 
 inv_phi = (sqrt(5) - 1) / 2 # 1/phi                                                                                                                     
@@ -20,7 +22,7 @@ def gss(f, a, b, eps=1e-5):
     
     table = PrettyTable()
     column_names = ["Начало интервала", "Конец интервала", 
-                    "Точность поиска", "f(ak)", "f(bk)"]
+                    "Интервал поиска", "f(ak)", "f(bk)"]
     c_lst = [round(c, 5)]
     d_lst = [round(d, 5)]
     len_lst = [round(h, 5)]
@@ -65,18 +67,19 @@ def ops(f, a, b, eps=1e-5):
     N = 1
     x = (b - a) / (N + 1) + a
     y = f(x)
-    delta = (b - a) / (N + 1)
+    delta = 2 * (b - a)
     record_y = y
 
     N_lst = [N]
     x_lst = [x]
     y_lst = [y]
+    delta_lst = []
 
 
     table = PrettyTable()
     column_names = ["Количество точек (N)", "Значение x в минимуме", "Минимум"]
 
-    while delta > eps:
+    while delta >= eps:
         N += 1
         x = [k * (b - a) / (N + 1) + a for k in range(1, N + 1)]
         y = list(map(f, x))
@@ -86,7 +89,8 @@ def ops(f, a, b, eps=1e-5):
         x_lst.append(round(x[y.index(min(y))], 5))
 
         record_y = min(record_y, min(y))
-        delta = (b - a) / (N + 1)
+        delta = 2 * (b - a) / (N - 1)
+        delta_lst.append(delta)
         # print(N, record_y, delta)
 
     table.add_column(column_names[0], N_lst)
@@ -95,10 +99,28 @@ def ops(f, a, b, eps=1e-5):
     print(table)
     print("Рекордный минимум: ", record_y)
 
-    return record_y
+    return record_y, delta_lst
 
 
 if __name__ == "__main__":
     f = lambda x: x ** 2 * exp(sin(x)) 
+
+    xmin = 16.0
+    xmax = 20.0
+
+    dx = 0.01
+
+    xlist = arange(xmin, xmax, dx)
+    ylist = [f(x) for x in xlist]
+
+    plt.plot(xlist, ylist)
+    plt.grid(True)
+    plt.show()
+
     gss(f, 16, 20, eps=0.1)
-    ops(f, 16, 20, eps=0.1)
+    _, deltas = ops(f, 16, 20, eps=0.1)
+
+    plt.plot(range(2, len(deltas) + 2), deltas)
+    print(deltas)
+    plt.grid(True)
+    plt.show()

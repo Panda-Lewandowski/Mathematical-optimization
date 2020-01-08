@@ -24,7 +24,8 @@ def pareto_optimality(alter_matrix, main_crit=[3, 4]):
     matr = matr.sort_values(by=[main_crit[0]])
     xlist = matr[main_crit[0]]
     ylist = matr[main_crit[1]]
-    utop = [matr[main_crit[0]].max(), matr[main_crit[1]].max()]
+    # utop = [matr[main_crit[0]].max(), matr[main_crit[1]].max()]
+    utop = [10, 10]
     dists = []
     m_distances = []
     for i in range(len(xlist)):
@@ -92,7 +93,7 @@ def check_consistency_relation(matr):
 
 if __name__ == "__main__":
     print(alter_matrix)
-    # print("Replacing:", replacing_criteria_with_constraints(alter_matrix))
-    # print("Pareto:", pareto_optimality(alter_matrix))
-    # print("Weighting: ", weighting_and_combining_criteria(alter_matrix, weight_vector))
+    print("Replacing:", replacing_criteria_with_constraints(alter_matrix))
+    print("Pareto:", pareto_optimality(alter_matrix))
+    print("Weighting: ", weighting_and_combining_criteria(alter_matrix, weight_vector))
     print("Hierarchy: ", hierarchy_analysis(alter_matrix, vars, criteria))

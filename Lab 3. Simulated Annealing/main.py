@@ -30,15 +30,15 @@ if __name__ == '__main__':
             curr_state = new_state
             curr_eval = f(curr_state)
             min_eval = min(min_eval, curr_eval)
+            table.add_row([i, round(T1, 5), round(curr_state, 5), round(curr_eval, 5), "-", "+"])
         else:
             R = random.random()
-            if P(Dif, T1) > R:
+            if P(Dif, T1) >= R:
                 curr_state = new_state
                 curr_eval = f(curr_state)
                 min_eval = min(min_eval, curr_eval)
                 dis = "+"
-
-        table.add_row([i, round(T1, 5), round(curr_state, 5), round(curr_eval, 5), round(P(Dif, T1), 5), dis])
+            table.add_row([i, round(T1, 5), round(curr_state, 5), round(curr_eval, 5), round(P(Dif, T1), 5), dis])
         i += 1
         T1 = T1 * coolingRate
 
